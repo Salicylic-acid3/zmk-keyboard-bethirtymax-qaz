@@ -1,0 +1,9 @@
+if SHIELD_BETHIRTYMAX_QAZ
+
+config ZMK_KEYBOARD_NAME
+    default "bethirtymax-qaz"
+
+# USB の識別子(VID/PID/製造者/製品名)はここには書かない。default は ZMK 自身の
+# 既定値に先を越されて一度も効かない。bethirtymax_qaz.conf を見ること。
+
+endif

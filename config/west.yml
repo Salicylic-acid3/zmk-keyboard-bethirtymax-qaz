@@ -1,0 +1,97 @@
+manifest:
+  version: 1.2
+  defaults:
+    remote: cormoran
+    revision: main
+  remotes:
+    - name: cormoran
+      url-base: https://github.com/cormoran
+    - name: sekigon-gonnoc
+      url-base: https://github.com/sekigon-gonnoc
+    - name: salicylic-acid3
+      url-base: https://github.com/Salicylic-acid3
+  projects:
+    # ZMK: Salicylic-acid3 fork = cormoran main+dya + Studio notifications
+    #   that never wait forever for the host (branch main+dya+rpc-nonblocking).
+    #   Move to the fork's new SHA after rebasing it onto cormoran's branch.
+    - name: zmk
+      remote: salicylic-acid3
+      import: app/west.yml
+      clone-depth: 1
+      revision: 3a78ccb8e529d9ef021584d2ea495238b785ccf3
+    # Required by cormoran/zmk#main+dya: matching patched Zephyr.
+    - name: zephyr
+      revision: v4.1.0+zmk-fixes+nrf-half-duplex-uart
+      clone-depth: 1
+      import:
+        name-blocklist:
+          - ci-tools
+          - hal_altera
+          - hal_cypress
+          - hal_infineon
+          - hal_microchip
+          - hal_nxp
+          - hal_openisa
+          - hal_xtensa
+          - hal_st
+          - hal_ti
+          - loramac-node
+          - mcuboot
+          - mcumgr
+          - net-tools
+          - openthread
+          - edtt
+          - trusted-firmware-m
+    - name: zmk-feature-non-lipo-battery-management
+      remote: sekigon-gonnoc
+      revision: main
+    # --- Custom Studio Protocol: connection management ---
+    # custom-settings: Salicylic-acid3 fork = cormoran main + a fix so that
+    #   saving a subsystem also saves an array that was emptied in memory
+    #   (removing the last tap of a tap dance used to come back on reboot),
+    #   and discard restores an array's length. Offer upstream; follow
+    #   cormoran again once merged.
+    - name: zmk-feature-custom-settings
+      remote: salicylic-acid3
+      revision: a320d60130517b4252810d319e8a02587cbdc279
+    - name: zmk-module-ble-management
+    - name: zmk-feature-os-detection
+    - name: zmk-feature-default-layer
+      revision: codex/custom-rpc-rewrite
+      import: true
+    # --- Custom Studio Protocol: macro & combo runtime editing ---
+    - name: zmk-feature-runtime-macro
+      import: true
+    - name: zmk-feature-runtime-combo
+      import: true
+    # --- Custom Studio Protocol: tap dance runtime editing ---
+    # 30%キーボードでキーを取り戻すための機能。タップ回数ごとの割り当てを
+    # settings に置いてあるので、アプリから再ビルドなしで変えられる。
+    - name: zmk-feature-runtime-tap-dance
+      remote: salicylic-acid3
+      # branch: master
+      revision: 1961a0b36ebc8f2c46f904afd53533ce5b75db8a
+    # --- Custom Studio Protocol: diagnostics & device settings ---
+    # (Keeb-On! Studio's Troubleshooting and Settings tabs.)
+    - name: zmk-feature-device-info
+    # Watchdog: Salicylic-acid3 fork = cormoran main + freeze incidents that
+    #   record where the frozen thread was stuck (branch main).
+    - name: zmk-feature-watchdog
+      remote: salicylic-acid3
+      revision: c6d20492ebc7c6e97acdc1ed2262fc647ad8a65c
+    # 電池残量をアプリへ。ZMK本体はBLEのBattery Service経由でしか出さないので、
+    # USB接続だと見えない。USB給電中はセンサがUSBの電圧を読むので、モジュールは
+    # 電池駆動だった最後の値を保持して出す(central_on_usb フラグ付き)。
+    - name: zmk-feature-battery-report
+      remote: salicylic-acid3
+      # branch: master
+      revision: 65f3fc7d8fe03b017a3f3f7da2110d92418b498e
+    - name: zmk-feature-kscan-diagnostics
+    - name: zmk-feature-input-stream
+    - name: zmk-module-settings-rpc
+    # --- Custom Studio Protocol: keymap fast load ---
+    # 読み取り専用。BLE越しのキーマップ読み込みを速くするだけで、
+    # 書き込み(編集・保存)は従来どおり公式プロトコルを通る。
+    - name: zmk-feature-fast-keymap
+  self:
+    path: config

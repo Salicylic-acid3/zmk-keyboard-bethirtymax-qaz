@@ -1,0 +1,4 @@
+name: goforty_max
+build:
+  settings:
+    board_root: .

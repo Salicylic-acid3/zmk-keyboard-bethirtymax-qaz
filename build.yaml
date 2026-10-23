@@ -1,0 +1,8 @@
+include:
+  - board: acdb
+    shield: bethirtymax_qaz
+    snippet: studio-rpc-usb-uart
+    artifact-name: bethirtymax_qaz
+  - board: acdb
+    shield: settings_reset
+    artifact-name: settings_reset
