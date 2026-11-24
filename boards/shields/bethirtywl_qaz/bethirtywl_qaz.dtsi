@@ -1,5 +1,5 @@
 #include <dt-bindings/zmk/matrix_transform.h>
-#include "bethirtymax_qaz-layouts.dtsi"
+#include "bethirtywl_qaz-layouts.dtsi"
 
 / {
     chosen {

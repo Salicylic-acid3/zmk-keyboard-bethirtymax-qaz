@@ -1,2 +1,0 @@
-config SHIELD_BETHIRTYMAX_QAZ
-    def_bool $(shields_list_contains,bethirtymax_qaz)

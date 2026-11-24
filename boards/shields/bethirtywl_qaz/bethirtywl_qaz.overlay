@@ -1,4 +1,4 @@
-#include "bethirtymax_qaz.dtsi"
+#include "bethirtywl_qaz.dtsi"
 
 /* 電池の測定先を VDD(電源ライン)に変える。
  *
